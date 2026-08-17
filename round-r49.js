@@ -38,7 +38,7 @@
   script.src='./review-notes-813.js?v=r112';
   script.onload=function(){
     var decouple=document.createElement('script');
-    decouple.src='./auto-switch-decoupled.js?v=20260817-12';
+    decouple.src='./auto-switch-decoupled.js?v=20260817-13';
     document.body.appendChild(decouple);
   };
   document.body.appendChild(script);

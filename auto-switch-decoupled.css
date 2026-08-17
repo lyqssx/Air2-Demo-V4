@@ -97,6 +97,7 @@
 }
 
 #demo .auto-switch-component .v4-switch { flex: 0 0 42px; margin-left: 12px; }
+#demo .auto-switch-component .v4-switch i { z-index: 2; }
 
 /* Keep all mode/program card variants the same height, so toggling Auto Switch
    does not move the level and speed cards below. */
@@ -170,6 +171,40 @@
   box-shadow: 0 4px 10px rgba(139, 0, 43, .16) !important;
 }
 
+#demo .v4-controls.auto-switch-ring-on > .auto-switch-component .v4-switch.on {
+  position: relative !important;
+  overflow: hidden !important;
+  isolation: isolate !important;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .10),
+    0 4px 10px rgba(36, 15, 27, .10) !important;
+}
+
+#demo .v4-controls.auto-switch-ring-on > .auto-switch-component .v4-switch.on::before {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  box-sizing: border-box;
+  border-radius: inherit;
+  background:
+    conic-gradient(from var(--autoSwitchToggleAngle, 0deg) at 50% 50%,
+      rgba(255, 255, 255, 0) 0deg,
+      rgba(255, 255, 255, 0) 42deg,
+      rgba(185, 15, 74, .52) 58deg,
+      rgba(255, 232, 240, .96) 70deg,
+      rgba(185, 15, 74, .44) 82deg,
+      rgba(255, 255, 255, 0) 104deg,
+      rgba(255, 255, 255, 0) 360deg);
+  content: "";
+  padding: 1.5px;
+  pointer-events: none;
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  filter: drop-shadow(0 0 4px rgba(185, 15, 74, .24));
+  animation: autoSwitchToggleEdgeFlow 3.2s linear infinite, autoSwitchToggleEdgeBreath 2.8s ease-in-out infinite;
+}
+
 #demo .v4-control > .v4-controls.auto-switch-ring-on {
   position: relative !important;
   overflow: visible !important;
@@ -233,6 +268,12 @@
   initial-value: 0deg;
 }
 
+@property --autoSwitchToggleAngle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 @keyframes autoSwitchEdgeWake {
   0%, 100% {
     opacity: .42;
@@ -250,6 +291,15 @@
 
 @keyframes autoSwitchEdgeFlow {
   to { --autoSwitchAngle: 360deg; }
+}
+
+@keyframes autoSwitchToggleEdgeFlow {
+  to { --autoSwitchToggleAngle: 360deg; }
+}
+
+@keyframes autoSwitchToggleEdgeBreath {
+  0%, 100% { opacity: .52; }
+  50% { opacity: .86; }
 }
 
 @keyframes autoSwitchIconBreath {
@@ -291,7 +341,8 @@
   #demo .v4-control > .v4-controls.auto-switch-ring-on::before,
   #demo .v4-control > .v4-controls.auto-switch-ring-on::after,
   #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon,
-  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon i { animation: none !important; }
+  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon i,
+  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .v4-switch.on::before { animation: none !important; }
 }
 
 /* Hold to Finish must be a real 2-second hold. The fill travels left-to-right;
