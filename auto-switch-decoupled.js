@@ -2,7 +2,7 @@
   if (!document.querySelector('link[data-auto-switch-decoupled]')) {
     var styles = document.createElement('link');
     styles.rel = 'stylesheet';
-    styles.href = './auto-switch-decoupled.css?v=20260817-10';
+    styles.href = './auto-switch-decoupled.css?v=20260817-12';
     styles.setAttribute('data-auto-switch-decoupled', '');
     document.head.appendChild(styles);
   }
@@ -39,6 +39,60 @@
       controls.classList.toggle('auto-switch-ring-on', !!state.auto);
     });
   }
+
+  var holdToFinish = null;
+  var holdToFinishPointer = null;
+  function cancelHoldToFinish() {
+    if (holdToFinish) clearTimeout(holdToFinish);
+    holdToFinish = null;
+    holdToFinishPointer = null;
+    var finish = document.querySelector('#demo .v4-finish');
+    if (finish) finish.classList.remove('holding');
+  }
+
+  function completeHoldToFinish() {
+    holdToFinish = null;
+    holdToFinishPointer = null;
+    state.running = false;
+    state.paused = false;
+    state.modal = 'log';
+    if (typeof window.v4View === 'function') window.v4View();
+  }
+
+  document.addEventListener('pointerdown', function (event) {
+    var finish = event.target.closest && event.target.closest('#demo [data-v4="finish"]');
+    if (!finish || document.body.classList.contains('review-static')) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    cancelHoldToFinish();
+    holdToFinishPointer = event.pointerId;
+    finish.classList.add('holding');
+    if (finish.setPointerCapture) {
+      try { finish.setPointerCapture(event.pointerId); } catch (_) {}
+    }
+    holdToFinish = setTimeout(completeHoldToFinish, 2000);
+  }, true);
+
+  document.addEventListener('pointerup', function (event) {
+    if (holdToFinishPointer == null || event.pointerId !== holdToFinishPointer) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    cancelHoldToFinish();
+  }, true);
+
+  document.addEventListener('pointercancel', function (event) {
+    if (holdToFinishPointer == null || event.pointerId !== holdToFinishPointer) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    cancelHoldToFinish();
+  }, true);
+
+  document.addEventListener('click', function (event) {
+    var finish = event.target.closest && event.target.closest('#demo [data-v4="finish"]');
+    if (!finish) return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+  }, true);
 
   function stripEmbeddedSwitch(markup) {
     return markup

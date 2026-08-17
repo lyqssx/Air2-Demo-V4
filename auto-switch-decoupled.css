@@ -161,6 +161,7 @@
 #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon i {
   border-color: rgba(255, 255, 255, .58) !important;
   box-shadow: 0 0 8px rgba(255, 255, 255, .24) !important;
+  animation: autoSwitchInnerCircleBreath 2.1s ease-in-out infinite !important;
 }
 
 #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__copy em {
@@ -268,6 +269,19 @@
   }
 }
 
+@keyframes autoSwitchInnerCircleBreath {
+  0%, 100% {
+    opacity: .68;
+    transform: scale(.94);
+    box-shadow: 0 0 5px rgba(255, 255, 255, .18);
+  }
+  50% {
+    opacity: .98;
+    transform: scale(1.08);
+    box-shadow: 0 0 11px rgba(255, 255, 255, .42);
+  }
+}
+
 @keyframes autoSwitchEdgeBreath {
   0%, 100% { opacity: .42; }
   50% { opacity: .78; }
@@ -276,5 +290,12 @@
 @media (prefers-reduced-motion: reduce) {
   #demo .v4-control > .v4-controls.auto-switch-ring-on::before,
   #demo .v4-control > .v4-controls.auto-switch-ring-on::after,
-  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon { animation: none !important; }
+  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon,
+  #demo .v4-controls.auto-switch-ring-on > .auto-switch-component .auto-switch-component__icon i { animation: none !important; }
+}
+
+/* Hold to Finish must be a real 2-second hold. The fill travels left-to-right;
+   releasing before it reaches the end cancels the finish action. */
+#demo .v4-finish.holding::after {
+  animation-duration: 2s !important;
 }
